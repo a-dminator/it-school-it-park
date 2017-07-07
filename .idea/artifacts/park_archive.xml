@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="park_archive">
+    <output-path>/utils/it-school-it-park-out/webapps</output-path>
+    <root id="archive" name="park_archive.war">
+      <element id="artifact" artifact-name="park" />
+    </root>
+  </artifact>
+</component>

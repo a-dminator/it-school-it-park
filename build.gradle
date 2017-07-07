@@ -1,0 +1,91 @@
+repositories {
+    jcenter()
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+buildscript {
+    ext {
+        kotlin_version = '1.1.3-2'
+        kotlinx_html_version = '0.5.12'
+        jooq_version = '3.9.1'
+        postgre_driver_version = '9.4-1201-jdbc41'
+        spark_version = '2.5.4'
+        gson_version = '2.7'
+        c3p0_version = '0.9.1.2'
+        okhttp_version = '3.6.0'
+        sqlite_dirver_version = '3.16.1'
+    }
+    repositories {
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.postgresql:postgresql:$postgre_driver_version"
+        classpath "org.xerial:sqlite-jdbc:$sqlite_dirver_version"
+        classpath "org.jooq:jooq-codegen:$jooq_version"
+    }
+}
+
+sourceSets {
+    main.kotlin.srcDirs += "src/main/kotlin"
+    main.java.srcDirs += "src/main/java"
+}
+
+dependencies {
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx.html.jvm:$kotlinx_html_version"
+
+    compile "com.sparkjava:spark-core:$spark_version"
+    compile "org.nanohttpd:nanohttpd:2.3.1"
+
+    compile "org.jooq:jooq:$jooq_version"
+    compile "org.jooq:jooq-codegen:$jooq_version"
+    compile "org.jooq:jooq-meta:$jooq_version"
+
+    compile "org.postgresql:postgresql:$postgre_driver_version"
+    compile "org.xerial:sqlite-jdbc:$sqlite_dirver_version"
+
+    compile "c3p0:c3p0:$c3p0_version"
+
+    compile "com.google.code.gson:gson:$gson_version"
+
+    compile "com.squareup.okhttp3:okhttp:3.6.0"
+
+    testCompile "junit:junit:4.12"
+}
+
+task jooqGenSqlite << {
+
+    def dbName = "sqlite"
+
+    Properties props = new Properties()
+    props.load(new FileInputStream("src/main/resources/${dbName}.properties"))
+
+    new File("src/main/java/jooq/").delete()
+    def writer = new StringWriter()
+    new groovy.xml.MarkupBuilder(writer).configuration('xmlns': 'http://www.jooq.org/xsd/jooq-codegen-3.9.0.xsd') {
+        jdbc() {
+            driver(props.getProperty("DRIVER"))
+            url(props.getProperty("URL"))
+        }
+        generator() {
+            database() {
+            }
+            generate() {
+            }
+            target() {
+                packageName('jooq')
+                directory('src/main/java')
+            }
+        }
+    }
+
+    org.jooq.util.GenerationTool.main(
+            javax.xml.bind.JAXB.unmarshal(
+                    new StringReader(writer.toString()),
+                    org.jooq.util.jaxb.Configuration.class))
+}

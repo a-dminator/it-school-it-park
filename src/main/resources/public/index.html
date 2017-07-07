@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Документация</title>
+</head>
+<body>
+
+    <b style="font-size:40pt">/users</b><br><br>
+    /users/login (GET) - вход в аккаунт<br>
+    login: String - логин<br>
+    password: String - пароль<br>
+    <br>
+    /users/get (GET) - пользователь по логину<br>
+    login: String - логин<br>
+    <br>
+    /users/register (POST) - регистрация пользователя<br>
+    fName: String - имя<br>
+    lName: String - фамилия<br>
+    login: String - логин<br>
+    password: String - пароль<br>
+    photo: String - аватар<br>
+    <br><br>
+
+    <b style="font-size:40pt">/news</b><br><br>
+    /news (GET) - список всех новостей<br>
+    <br>
+    /news/post (POST) - добавить новость<br>
+    title: String - название новости<br>
+    content: String - текст новости<br>
+    image: String - картинка к новости<br>
+    userLogin: String - логин пользователя, который добавил новость<br>
+    <br>
+    /news/comments (GET - комментарии к новости<br>
+    newId: Int - ID новости<br>
+    <br>
+    /news/comments/post (POST) - обновление геопозиции<br>
+    newId: Int - ID новости<br>
+    userLogin: String - логин автора комментария<br>
+    content: String - текст комментария<br>
+    <br>
+
+    code: -1 http code: 500 undefined error<br>
+    code:  1 http code: 500 query param $paramName undefined<br>
+    code:  2 http code: 500 post param $paramName undefined<br>
+    code:  3 http code: 400 query param $paramName in not $type<br>
+    code:  4 http code: 400 query param $paramName incorrect<br>
+    code:  5 http code: 404 $what not found<br>
+
+</body>
+</html>
