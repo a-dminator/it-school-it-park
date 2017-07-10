@@ -17,8 +17,8 @@ fun usersRest() {
 
     get(path + "/login") { request, _ ->
 
-        val login    = request.query("login").asString
-        val password = request.query("password").asString
+        val login    by request.query.string
+        val password by request.query.string
 
         sqlite.query {
 
@@ -41,7 +41,7 @@ fun usersRest() {
 
     get(path + "/get") { request, _ ->
 
-        val login    = request.query("login").asString
+        val login by request.query.string
 
         sqlite.query {
 
@@ -62,11 +62,11 @@ fun usersRest() {
 
     post(path + "/register") { request, _ ->
 
-        val fName = request.query("fName").asString
-        val lName = request.query("lName").asString
-        val login = request.query("login").asString
-        val password = request.query("password").asString
-        val photo = request.query("photo").asString
+        val fName    by request.query.string
+        val lName    by request.query.string
+        val login    by request.query.string
+        val password by request.query.string
+        val photo    by request.query.string
 
         sqlite.query {
 
@@ -81,7 +81,7 @@ fun usersRest() {
                     photo)
 
             insertInto(USERS)
-                    .values(user)
+                    .set(user)
                     .execute()
 
             user.toJson(

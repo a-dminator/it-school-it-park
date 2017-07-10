@@ -19,7 +19,6 @@ fun newsRest() {
     val path = "/news"
 
     get(path) { _, _ ->
-
         sqlite.query {
             select().from(NEWS)
                     .fetch()
@@ -51,7 +50,7 @@ fun newsRest() {
                     userLogin)
 
             insertInto(NEWS)
-                    .values(new)
+                    .set(new)
                     .execute()
 
             new.toJson().toResponse()
@@ -78,9 +77,9 @@ fun newsRest() {
 
     post(path + "/comments/post") { request, _ ->
 
-        val newId     = request.query("newId").asInt
-        val userLogin = request.query("userLogin").asString
-        val content   = request.query("content").asString
+        val newId     by request.query.int
+        val userLogin by request.query.string
+        val content   by request.query.string
 
         sqlite.query {
 
@@ -93,7 +92,7 @@ fun newsRest() {
                     content)
 
             insertInto(NEWS_COMMENTS)
-                    .values(comment)
+                    .set(comment)
                     .execute()
 
             comment.toJson().toResponse()
